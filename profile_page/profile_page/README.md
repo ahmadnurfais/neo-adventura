@@ -1,4 +1,4 @@
-this is the prototype of the profile page
+this is the prototype for the profile page
 
 ![image](https://github.com/dickytrianza/neo-adventura/assets/93440841/eeb531ab-afcf-4f23-8a3a-c158692b2c03)
 

@@ -1,25 +1,21 @@
+// Navigation.js
 import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import App from './App';
 import ManageProfile from './ManageProfile';
-import Profile from './Profile';
-import ReviewHistory from './ReviewHistory';
-import SavedDestination from './SavedDestination';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
-function App() {
+function Navigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Profile" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="ManageProfile" component={ManageProfile} />
-        <Stack.Screen name="ReviewHistory" component={ReviewHistory} />
-        <Stack.Screen name="SavedDestination" component={SavedDestination} />
+      <Stack.Navigator>
+        <Stack.Screen name='Profile' component={App} />
+        <Stack.Screen name='ManageProfile' component={ManageProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-export default App;
+export default Navigation;

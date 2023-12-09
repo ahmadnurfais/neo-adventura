@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "NeoAdventura00.app"
-               BlueprintName = "NeoAdventura00"
-               ReferencedContainer = "container:NeoAdventura00.xcodeproj">
+               BuildableName = "NeoAdventura.app"
+               BlueprintName = "NeoAdventura"
+               ReferencedContainer = "container:NeoAdventura.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "NeoAdventura00Tests.xctest"
-               BlueprintName = "NeoAdventura00Tests"
-               ReferencedContainer = "container:NeoAdventura00.xcodeproj">
+               BuildableName = "NeoAdventuraTests.xctest"
+               BlueprintName = "NeoAdventuraTests"
+               ReferencedContainer = "container:NeoAdventura.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "NeoAdventura00.app"
-            BlueprintName = "NeoAdventura00"
-            ReferencedContainer = "container:NeoAdventura00.xcodeproj">
+            BuildableName = "NeoAdventura.app"
+            BlueprintName = "NeoAdventura"
+            ReferencedContainer = "container:NeoAdventura.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "NeoAdventura00.app"
-            BlueprintName = "NeoAdventura00"
-            ReferencedContainer = "container:NeoAdventura00.xcodeproj">
+            BuildableName = "NeoAdventura.app"
+            BlueprintName = "NeoAdventura"
+            ReferencedContainer = "container:NeoAdventura.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -1,4 +1,4 @@
-package com.neoadventura00;
+package com.neoadventura;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

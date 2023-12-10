@@ -4,6 +4,7 @@ import { View, ScrollView, TextInput, Text, TouchableOpacity, Image, StyleSheet,
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_BASE_URL } from '@env';
 
 const ChatScreen = () => {
     const [users, setUsers] = useState([]);
@@ -24,7 +25,7 @@ const ChatScreen = () => {
 
             const getUsers = async () => {
                 try {
-                    const response = await axios.get('https://ahmadnurfais.my.id/react-native/neo-adventura/api?type=getUsers');
+                    const response = await axios.get(`${API_BASE_URL}?type=getUsers`);
                     const data = response.data.result;
                     if (data && isActive) {
                         setUsers(data);
@@ -44,7 +45,7 @@ const ChatScreen = () => {
 
     const getUsersRefresh = async () => {
         try {
-            const response = await axios.get('https://ahmadnurfais.my.id/react-native/neo-adventura/api?type=getUsers');
+            const response = await axios.get(`${API_BASE_URL}?type=getUsers`);
             const data = response.data.result;
             if (data) {
                 setUsers(data);

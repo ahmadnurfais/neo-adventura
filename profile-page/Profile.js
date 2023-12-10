@@ -151,7 +151,7 @@ const styles_d = StyleSheet.create({
         width: '80%',
         padding: 15,
         borderRadius: 25,
-        backgroundColor: '#007bff',
+        backgroundColor: '#1e2c3a',
         alignItems: 'center',
         marginBottom: 15,
         elevation: 3,
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     },
     avatar: {
         marginBottom: 10,
-        color: '#0400f4',
+        color: '#1e2c3a',
     },
     avatar2: {
         width: 100,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     },
     changeProfileText: {
         marginTop: 5,
-        color: 'blue',
+        color: '#efa663',
     },
     profileName: {
         fontSize: 25,
@@ -219,16 +219,16 @@ const styles = StyleSheet.create({
     },
     buttonIcon: {
         marginRight: 10,
-        color: '#0400f4',
+        color: '#1e2c3a',
     },
     buttonText: {
         fontSize: 18,
-        color: '#0400f4',
+        color: '#1e2c3a',
     },
     logoutButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#0400f4',
+        backgroundColor: '#1e2c3a',
         width: '90%',
         padding: 15,
         borderRadius: 20,

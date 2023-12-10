@@ -138,7 +138,7 @@ const Bookmarks = () => {
             ) : (
                 <View style={styles.container}>
                     {isLoading ? (
-                        <ActivityIndicator size="large" color="#0400f4" />
+                        <ActivityIndicator size="large" color="#1e2c3e" />
                     ) : isNoData ? (
                         <ScrollView
                             contentContainerStyle={styles.noDataView}
@@ -207,7 +207,7 @@ const styles_d = StyleSheet.create({
         width: '80%',
         padding: 15,
         borderRadius: 25,
-        backgroundColor: '#007bff',
+        backgroundColor: '#1e2c3a',
         alignItems: 'center',
         marginBottom: 15,
         elevation: 3,
@@ -242,8 +242,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 15,
         padding: 15,
-        borderWidth: 1,
-        borderColor: '#ccc',
         borderRadius: 10,
         backgroundColor: '#fff',
         marginHorizontal: 20,

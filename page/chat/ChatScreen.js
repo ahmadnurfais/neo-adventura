@@ -127,7 +127,7 @@ export default function ChatScreen() {
         <>
             {isLoading ? (
                 <View style={styles.container}>
-                    <ActivityIndicator size="large" color="#0400f4" />
+                    <ActivityIndicator size="large" color="#1e2c3a" />
                 </View>
             ) : (
                 <View>

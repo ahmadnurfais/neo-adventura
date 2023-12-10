@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View, Image, Alert } from 'react-native';
 import { TextInput, Button, Avatar, ActivityIndicator } from 'react-native-paper';
 import { useRoute } from '@react-navigation/native';
+import { API_BASE_URL } from '@env';
 
 const ManageProfile = () => {
     const route = useRoute();
@@ -24,7 +25,7 @@ const ManageProfile = () => {
 
     const handleSave = () => {
         setIsUploading(true);
-        fetch('https://ahmadnurfais.my.id/react-native/neo-adventura/api?type=manageProfile', {
+        fetch(`${API_BASE_URL}?type=manageProfile`, {
             method: 'POST',
             body: createFormData({ id: userID, name: profileName, username: profileUsername, description: profileDescription }),
             // headers: {
@@ -66,7 +67,7 @@ const ManageProfile = () => {
                     onChangeText={setProfileName}
                     mode="flat"
                     underlineColor="transparent"
-                    activeUnderlineColor="#0400f4"
+                    activeUnderlineColor="#1e2c3a"
                     style={styles.input}
                 />
                 <TextInput
@@ -75,7 +76,7 @@ const ManageProfile = () => {
                     onChangeText={setProfileEmail}
                     mode="flat"
                     underlineColor="transparent"
-                    activeUnderlineColor="#0400f4"
+                    activeUnderlineColor="#1e2c3a"
                     style={styles.input}
                     keyboardType="email-address"
                     disabled={true}
@@ -86,7 +87,7 @@ const ManageProfile = () => {
                     onChangeText={setProfileUsername}
                     mode="flat"
                     underlineColor="transparent"
-                    activeUnderlineColor="#0400f4"
+                    activeUnderlineColor="#1e2c3a"
                     style={styles.input}
                 />
                 <TextInput
@@ -95,13 +96,13 @@ const ManageProfile = () => {
                     onChangeText={setProfileDescription}
                     mode="flat"
                     underlineColor="transparent"
-                    activeUnderlineColor="#0400f4"
+                    activeUnderlineColor="#1e2c3a"
                     style={styles.input}
                     multiline
                     numberOfLines={2}
                 />
                 {isUploading ? (
-                    <ActivityIndicator size="small" color="#0400f4" />
+                    <ActivityIndicator size="small" color="#1e2c3a" />
                 ) : (
                     <Button
                         mode="contained"
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 16,
-        backgroundColor: '#0400f4',
+        backgroundColor: '#1e2c3a',
     },
     profilePic: {
         width: 120,

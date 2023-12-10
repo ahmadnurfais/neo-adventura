@@ -130,7 +130,7 @@ export default function Chat({ navigation }) {
             </View>
             {isLoading ? (
                 <View style={[styles.container, styles.horizontal]}>
-                    <ActivityIndicator size="large" color="#0400f4" />
+                    <ActivityIndicator size="large" color="#1e2c3a" />
                 </View>
             ) : (
                 <GiftedChat
@@ -203,7 +203,7 @@ const styles2 = StyleSheet.create({
         borderBottomColor: '#ddd',
     },
     backButton: {
-        color: '#0084FF',
+        color: '#1e2c3a',
         fontSize: 16,
         marginRight: 10,
     },

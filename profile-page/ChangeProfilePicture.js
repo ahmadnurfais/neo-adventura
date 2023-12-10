@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     },
     buttonChange: {
         marginTop: 10,
-        backgroundColor: '#0400f4',
+        backgroundColor: '#1e2c3a',
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 5, // Rounded corners

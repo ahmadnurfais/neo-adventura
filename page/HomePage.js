@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, Alert, RefreshControl } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
-// import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { API_BASE_URL } from '@env';
 
 const DestinationPlaces = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [destinationPlaces, setDestinationPlaces] = useState([]);
     const insets = useSafeAreaInsets();
     const navigation = useNavigation();
     const [searchQuery, setSearchQuery] = useState('');
+    const [refreshing, setRefreshing] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         AsyncStorage.getItem('user_id')
             .then((userId) => {
                 console.log('User ID:', userId);
                 if (userId) {
-                    setIsLoggedIn(true);
                     fetchData(userId); // Fetch data with user ID
                 } else {
-                    setIsLoggedIn(false);
                     fetchData(null); // Fetch data without user ID
                 }
             })
@@ -31,25 +31,46 @@ const DestinationPlaces = () => {
             });
     }, []);
 
+    const onRefresh = () => {
+        setRefreshing(true);
+        AsyncStorage.getItem('user_id')
+            .then((userId) => {
+                if (userId) {
+                    fetchData(userId)
+                        .finally(() => setRefreshing(false)); // Fetch data with user ID
+                } else {
+                    fetchData(null)
+                        .finally(() => setRefreshing(false)); // Fetch data without user ID
+                }
+            })
+            .catch((error) => {
+                console.error('AsyncStorage error:', error);
+                setRefreshing(false);
+            });
+    };
+
     const fetchData = (userId) => {
-        let url = 'https://ahmadnurfais.my.id/react-native/neo-adventura/api?type=get';
+        let url = `${API_BASE_URL}?type=get`;
         if (userId !== null) {
-            url = `https://ahmadnurfais.my.id/react-native/neo-adventura/api?type=getWithBookmark&id=${userId}`;
+            url = `${API_BASE_URL}?type=getWithBookmark&id=${userId}`;
         }
 
-        fetch(url)
+        return fetch(url)
             .then((response) => response.json())
             .then((data) => {
                 const placesFromAPI = data.result.map((place) => ({
+                    user_id: userId,
                     id: place.id_tempat_wisata,
                     title: place.nama_wisata,
                     address: place.alamat,
                     picture: `data:image/jpeg;base64,${place.picture1}`,
                     category: place.kategori,
                     bookmarked: place.bookmarked,
+                    isLoading: false,
                 }));
 
                 setDestinationPlaces(placesFromAPI);
+                setIsLoading(false);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -68,13 +89,20 @@ const DestinationPlaces = () => {
                 <Text style={styles.address}>{item.address}</Text>
                 <Text style={styles.category}>{item.category}</Text>
             </View>
-            <TouchableOpacity style={styles.favoriteButton} onPress={() => handleFavoritePress(item.id)}>
-                <Icon
-                    name={item.bookmarked === 'true' ? 'heart' : 'heart-outline'}
-                    size={24}
-                    color="#ff0000"
-                />
-            </TouchableOpacity>
+            {item.isLoading ? (
+                <ActivityIndicator size="large" color="#1e2c3a" />
+            ) : (
+                <TouchableOpacity
+                    style={styles.favoriteButton}
+                    onPress={() => item.user_id !== null ? toggleBookmark(item.user_id, item) : Alert.alert('Oops!', 'This feature is only available for logged-in users. Create your own account now!')}
+                >
+                    <Icon
+                        name={item.bookmarked === 'true' ? 'heart' : 'heart-outline'}
+                        size={24}
+                        color="#ff0000"
+                    />
+                </TouchableOpacity>
+            )}
         </TouchableOpacity>
     );
 
@@ -86,47 +114,89 @@ const DestinationPlaces = () => {
         return data;
     };
 
-    const handleFavoritePress = (itemID) => {
-        fetch('https://ahmadnurfais.my.id/react-native/neo-adventura/api?type=addBookmark', {
-            method: 'POST',
-            body: createFormData({ userID: 'USER001', destinationID: itemID }),
-        }).then(response => response.json())
-            .then(response => {
-                console.log('Update response: ', response);
-                if (response.success === true) {
-                    Alert.alert('Update Successful', response.message);
-                    setDestinationPlaces(prevPlaces =>
-                        prevPlaces.map(place =>
-                            place.id === itemID ? { ...place, bookmarked: place.bookmarked === 'true' ? 'false' : 'true' } : place
-                        )
-                    );
-                } else {
-                    Alert.alert('Update Failed', response.message);
-                }
-            })
-            .catch(error => {
-                console.log('Update error: ', error);
-                Alert.alert('Update Failed', 'Network issue. Please try again.');
-            });
+    const toggleBookmark = async (userId, item) => {
+        const isCurrentlyBookmarked = item.bookmarked === 'true';
+        const newBookmarkStatus = !isCurrentlyBookmarked;
+
+        // Update UI optimistically
+        setDestinationPlaces(prevPlaces =>
+            prevPlaces.map(place =>
+                place.id === item.id ? { ...place, isLoading: true } : place
+            )
+        );
+
+        try {
+            let response;
+            if (newBookmarkStatus) {
+                // Add bookmark
+                response = await fetch(`${API_BASE_URL}?type=addBookmark`, {
+                    method: 'POST',
+                    body: createFormData({ userID: userId, destinationID: item.id }),
+                });
+            } else {
+                // Delete bookmark
+                response = await fetch(`${API_BASE_URL}?type=deleteBookmark&userID=${userId}&destinationID=${item.id}`, { method: 'POST' });
+            }
+
+            const responseData = await response.json();
+            console.log('Bookmark update response: ', responseData);
+
+            // Update isLoading to false for all cases
+            setDestinationPlaces(prevPlaces =>
+                prevPlaces.map(place =>
+                    place.id === item.id ? { ...place, isLoading: false } : place
+                )
+            );
+
+            if (responseData.success === true) {
+                // Update the bookmark status based on the operation performed
+                setDestinationPlaces(prevPlaces =>
+                    prevPlaces.map(place =>
+                        place.id === item.id ? { ...place, bookmarked: newBookmarkStatus ? 'true' : 'false' } : place
+                    )
+                );
+                Alert.alert(newBookmarkStatus ? 'Bookmarked Successfully' : 'Bookmark Deleted Successfully', responseData.message);
+            } else {
+                Alert.alert('Failed', responseData.message);
+            }
+        } catch (error) {
+            console.error('Error updating bookmark:', error);
+            Alert.alert('Error', 'An error occurred while updating the bookmark');
+        }
     };
 
     return (
         <View style={{ ...styles.container, paddingBottom: insets.bottom }}>
-            <SearchBar
-                placeholder="Search destinations..."
-                onChangeText={(text) => setSearchQuery(text)}
-                value={searchQuery}
-                containerStyle={styles.searchBar}
-                inputContainerStyle={styles.searchBarInput}
-                inputStyle={styles.searchBarText}
-            />
-            <FlatList
-                data={destinationPlaces.filter((place) =>
-                    place.title.toLowerCase().includes(searchQuery.toLowerCase())
-                )}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id}
-            />
+            {isLoading ? (
+                // eslint-disable-next-line react-native/no-inline-styles
+                <View style={{ flex: 1, justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#1e2c3a" />
+                </View>
+            ) : (
+                <>
+                    <SearchBar
+                        placeholder="Search destinations..."
+                        onChangeText={(text) => setSearchQuery(text)}
+                        value={searchQuery}
+                        containerStyle={styles.searchBar}
+                        inputContainerStyle={styles.searchBarInput}
+                        inputStyle={styles.searchBarText}
+                    />
+                    <FlatList
+                        data={destinationPlaces.filter((place) =>
+                            place.title.toLowerCase().includes(searchQuery.toLowerCase())
+                        )}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.id}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />
+                        }
+                    />
+                </>
+            )}
         </View>
     );
 };
@@ -185,7 +255,7 @@ const styles = StyleSheet.create({
     },
     category: {
         fontSize: 16,
-        color: 'green',
+        color: '#efa663',
         marginTop: 8,
     },
     favoriteButton: {

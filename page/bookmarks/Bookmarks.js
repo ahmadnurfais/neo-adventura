@@ -62,11 +62,11 @@ const Bookmarks = () => {
 
     const deleteBookmark = async (userId, destinationId) => {
         try {
-            const response = await axios.post(`https://ahmadnurfais.my.id/react-native/neo-adventura/api?type=deleteBookmark&userID=${userId}&destinationID=${destinationId}`);
+            const response = await axios.post(`${API_BASE_URL}?type=deleteBookmark&userID=${userId}&destinationID=${destinationId}`);
 
             console.log(response.data);
 
-            if (response.data.status === 'success') {
+            if (response.data.success === true) {
                 onRefresh();
                 Alert.alert('Success', 'Bookmark deleted successfully');
             } else {
@@ -158,9 +158,11 @@ const Bookmarks = () => {
                                 renderItem={({ item }) => (
                                     <View style={styles.bookmarkItem}>
                                         <View style={{ flex: 1, marginRight: 10 }}>
-                                            <Text style={styles.bookmarkName}>{item.name}</Text>
+                                            <TouchableOpacity onPress={() => navigation.navigate('Detail', { id: item.destination_id })}>
+                                                <Text style={styles.bookmarkName}>{item.name}</Text>
+                                            </TouchableOpacity>
                                             <Text style={styles.bookmarkInfo}>{item.alamat}</Text>
-                                            <Text style={styles.bookmarkInfo}>{item.kategori}</Text>
+                                            <Text style={styles.bookmarkCategory}>{item.kategori}</Text>
                                         </View>
                                         <Image
                                             source={{ uri: `data:image/jpeg;base64,${item.picture}` }}
@@ -255,6 +257,10 @@ const styles = StyleSheet.create({
     bookmarkInfo: {
         fontSize: 16,
         color: '#333',
+    },
+    bookmarkCategory: {
+        fontSize: 15,
+        color: '#1e2c3a',
     },
     bookmarkImage: {
         width: 50,

@@ -77,7 +77,7 @@ const BottomNav = () => {
                     }
                     return <Icon1 name={iconName} size={size} style={{ marginTop: 10 }} color={color} />;
                 },
-                tabBarActiveTintColor: 'blue',
+                tabBarActiveTintColor: '#1e3c2a',
                 tabBarInactiveTintColor: 'gray',
                 tabBarLabelStyle: {
                     fontSize: 10,
@@ -89,7 +89,7 @@ const BottomNav = () => {
                     height: 60,
                 },
                 tabBarIndicatorStyle: {
-                    backgroundColor: 'blue',
+                    backgroundColor: '#1e2c3a',
                 },
                 headerRight: () => (
                     <View style={{ flexDirection: 'row' }}>

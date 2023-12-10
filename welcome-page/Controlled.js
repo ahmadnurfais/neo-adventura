@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
@@ -10,6 +11,7 @@ import Login from './Login';
 import Register from './Register';
 import Verification from './Verification';
 import WelcomePage from './WelcomePage';
+import WelcomeSwiper from './WelcomeSwiper';
 
 import DestinationDetailPage from '../page/destination/Detail';
 import CommentPage from '../page/comment/CommentPage';
@@ -30,11 +32,28 @@ function App() {
         });
     }, []);
 
+    const WelcomeStack = createStackNavigator();
+    const WelcomeStackScreen = () => (
+        <WelcomeStack.Navigator
+            initialRouteName="WelcomeSwiper"
+            screenOptions={{ headerShown: false }}
+        >
+            <WelcomeStack.Screen
+                name="WelcomePage"
+                component={WelcomePage}
+            />
+            <WelcomeStack.Screen
+                name="WelcomeSwiper"
+                component={WelcomeSwiper}
+            />
+        </WelcomeStack.Navigator>
+    );
+
     if (!isInitialCheckComplete) {
         // Return a loading indicator instead of null
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', color: '#0400f4' }}>
-                <ActivityIndicator size="large" />
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator size="large" color="#1e32c3a" />
             </View>
         );
     }
@@ -42,7 +61,7 @@ function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName={userID === null ? 'Welcome' : 'HomeScreen'} screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Welcome" component={WelcomePage} />
+                <Stack.Screen name="Welcome" component={WelcomeStackScreen} />
                 <Stack.Screen name="HomeScreen" component={BottomNav} options={{ title: 'App' }} />
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Register" component={Register} />

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_BASE_URL } from '@env';
 
 function Login() {
     const navigation = useNavigation();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         // Check if the user is logged in when the app starts
@@ -24,8 +27,9 @@ function Login() {
     const [error, setError] = useState('');
 
     const handleLogin = async () => {
+        setIsLoading(true);
         try {
-            const url = `https://ahmadnurfais.my.id/react-native/neo-adventura/api?type=login&username=${username}&pw=${password}`;
+            const url = `${API_BASE_URL}?type=login&username=${username}&pw=${password}`;
             const response = await fetch(url);
             console.log('Response status code:', response.status); // 200 means success
 
@@ -34,6 +38,8 @@ function Login() {
                 console.log('Response data:', data);
 
                 if (data.success) {
+                    setIsLoading(false);
+                    setError(data.message);
                     // Store user data in AsyncStorage for future use.
                     await AsyncStorage.setItem('user_id', data.user_id);
                     // Navigate to the user's dashboard or profile screen.
@@ -42,10 +48,12 @@ function Login() {
                         routes: [{ name: 'HomeScreen' }],
                     });
                 } else {
+                    setIsLoading(false);
                     // Handle login error, e.g., display an error message to the user.
                     setError(data.error_message);
                 }
             } else {
+                setIsLoading(false);
                 // Handle HTTP error.
                 setError('Network error: There is an error in the login process.');
             }
@@ -57,7 +65,7 @@ function Login() {
     };
 
     return (
-        <ImageBackground source={require('../bg.jpg')} style={styles.backgroundImage}>
+        <ImageBackground source={require('../bg2.png')} style={styles.backgroundImage}>
             <View style={styles.container}>
                 <Text style={styles.title}>Login with Account</Text>
                 <TextInput
@@ -79,9 +87,13 @@ function Login() {
                     value={password}
                     autoCapitalize="none"
                 />
-                <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                    <Text style={styles.loginButtonText}>Login</Text>
-                </TouchableOpacity>
+                {isLoading ? (
+                    <ActivityIndicator size="medium" color="white" />
+                ) : (
+                    <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                        <Text style={styles.loginButtonText}>Login</Text>
+                    </TouchableOpacity>
+                )}
                 {error ? <Text style={styles.errorText}>{error}</Text> : null}
                 <Text style={styles.forgotPassword}>Forgot Password?</Text>
                 <View style={styles.signUpContainer}>
@@ -128,7 +140,7 @@ const styles = StyleSheet.create({
     loginButton: {
         width: '100%',
         height: 50,
-        backgroundColor: 'blue',
+        backgroundColor: '#1e2c3a',
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -155,7 +167,7 @@ const styles = StyleSheet.create({
     signUpButton: {
         fontSize: 15,
         fontWeight: 'bold',
-        color: 'blue',
+        color: '#1e2c3a',
         marginLeft: 5,
         backgroundColor: 'white',
         borderColor: 'white',
@@ -167,9 +179,11 @@ const styles = StyleSheet.create({
     },
     errorText: {
         fontSize: 18,
-        color: 'red',
+        color: 'white',
         marginBottom: 20,
         textAlign: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: 'white',
     },
 });
 

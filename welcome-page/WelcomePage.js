@@ -19,7 +19,7 @@ function WelcomePage() {
             } else {
                 // User is opening the app for the first time.
                 // Mark the Welcome Page as seen, so it won't show again.
-                AsyncStorage.setItem('hasSeenWelcomePage', 'true');
+                AsyncStorage.setItem('hasSeenWelcomePage', true);
             }
 
             // Set initial check as complete.
@@ -49,7 +49,7 @@ function WelcomePage() {
                     <Text style={styles.welcomeText}>Welcome to Neo Adventura</Text>
                     <Text style={styles.description}>Get started by signing in or using the app without an account.</Text>
                     <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('Login'); }}>
-                        <Text style={styles.buttonText}>Sign In</Text>
+                        <Text style={styles.buttonText}>Sign In / Sign Up</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.secondaryButton} onPress={() => { navigation.navigate('HomeScreen'); }}>
                         <Text style={styles.secondaryButtonText}>Use Without an Account</Text>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     button: {
-        backgroundColor: 'blue',
+        backgroundColor: '#1e2c3a',
         paddingVertical: 15,
         paddingHorizontal: 40,
         borderRadius: 10,
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     secondaryButton: {
         backgroundColor: 'transparent',
         borderWidth: 2,
-        borderColor: 'blue',
+        borderColor: '#1e2c3a',
         paddingVertical: 15,
         paddingHorizontal: 40,
         borderRadius: 10,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     secondaryButtonText: {
-        color: 'blue',
+        color: '#1e2c3a',
         fontSize: 18,
         fontWeight: 'bold',
     },

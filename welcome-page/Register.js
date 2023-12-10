@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { API_BASE_URL } from '@env';
 
 function Register() {
     const [username, setUsername] = useState('');
@@ -8,13 +10,15 @@ function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigation = useNavigation();
 
     const handleRegistration = async () => {
+        setIsLoading(true);
         try {
             // Construct the registration URL
-            const registrationUrl = 'https://ahmadnurfais.my.id/react-native/neo-adventura/api?type=register';
+            const registrationUrl = `${API_BASE_URL}?type=register`;
 
             // Create a JSON object with user registration data
             const registrationData = {
@@ -33,6 +37,7 @@ function Register() {
             });
 
             if (response.ok) {
+                setIsLoading(false);
                 // Registration successful, handle the response as needed
                 const data = await response.json();
                 console.log(data);
@@ -45,17 +50,19 @@ function Register() {
                     setError(data.message);
                 }
             } else {
+                setIsLoading(false);
                 // Handle HTTP error
                 setError('Network error');
             }
         } catch (e) {
+            setIsLoading(false);
             // Handle network errors
             setError('Enter your registration data correctly');
         }
     };
 
     return (
-        <ImageBackground source={require('../bg.jpg')} style={styles.backgroundImage}>
+        <ImageBackground source={require('../bg2.png')} style={styles.backgroundImage}>
             <View style={styles.container}>
                 <Text style={styles.title}>Create an Account</Text>
                 <TextInput
@@ -91,9 +98,13 @@ function Register() {
                     secureTextEntry
                     autoCapitalize="none"
                 />
-                <TouchableOpacity style={styles.registerButton} onPress={handleRegistration}>
-                    <Text style={styles.registerButtonText}>Register</Text>
-                </TouchableOpacity>
+                {isLoading ? (
+                    <ActivityIndicator size="medium" color="white" />
+                ) : (
+                    <TouchableOpacity style={styles.registerButton} onPress={handleRegistration}>
+                        <Text style={styles.registerButtonText}>Register</Text>
+                    </TouchableOpacity>
+                )}
                 {error ? <Text style={styles.errorText}>{error}</Text> : null}
                 <View style={styles.signInContainer}>
                     <Text style={styles.signInText}>Already have an account?</Text>
@@ -139,7 +150,7 @@ const styles = StyleSheet.create({
     registerButton: {
         width: '100%',
         height: 50,
-        backgroundColor: 'blue',
+        backgroundColor: '#1e2c3a',
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -161,7 +172,7 @@ const styles = StyleSheet.create({
     signInButton: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: 'blue',
+        color: '#1e2c3a',
         marginLeft: 5,
         backgroundColor: 'white',
         borderColor: 'white',
@@ -172,9 +183,11 @@ const styles = StyleSheet.create({
     },
     errorText: {
         fontSize: 18,
-        color: 'red',
+        color: 'white',
         marginBottom: 20,
         textAlign: 'center',
+        textDecorationLine: 'underline',
+        textDecorationColor: 'white',
     },
 });
 

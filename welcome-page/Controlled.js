@@ -14,6 +14,7 @@ import WelcomePage from './WelcomePage';
 import WelcomeSwiper from './WelcomeSwiper';
 
 import DestinationDetailPage from '../page/destination/Detail';
+import MapView from '../page/destination/MapView';
 import CommentPage from '../page/comment/CommentPage';
 import Chat from '../page/chat/Chat';
 
@@ -68,6 +69,7 @@ function App() {
                 <Stack.Screen name="Verification" component={Verification} />
                 {/* Additional Stack */}
                 <Stack.Screen name="Detail" component={DestinationDetailPage} />
+                <Stack.Screen name="MapView" component={MapView} />
                 <Stack.Screen name="CommentPage" component={CommentPage} />
                 <Stack.Screen name="Chat" component={Chat} />
             </Stack.Navigator>
